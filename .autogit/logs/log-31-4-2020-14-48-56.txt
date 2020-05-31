@@ -1,0 +1,29 @@
+-------------------- Auto-Git Log --------------------
+		Sun May 31 2020 14:48:56 GMT+0700 (Indochina Time)
+------------------------------------------------------
+
+Modified files:
+* package.json
+* public/index.html
+* src/App.js
+* src/index.js
+
+
+Created files:
+* package-lock.json
+* src/Routes.js
+* src/core/Home.jsx
+* src/core/Menu.jsx
+* src/user/Signin.jsx
+* src/user/Signup.jsx
+
+
+Deleted files:
+* src/App.css
+* src/App.test.js
+* src/index.css
+* src/logo.svg
+* src/setupTests.js
+
+
+Renamed files:
