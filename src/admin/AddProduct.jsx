@@ -201,7 +201,7 @@ const AddProduct = () => {
 					{newPostForm()}
 				</div>
 			</div>
-		</Layout> 
+		</Layout>
 	);
 };
 
