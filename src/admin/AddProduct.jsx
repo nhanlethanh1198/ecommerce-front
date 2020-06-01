@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { createProduct } from "./apiAdmin";
 
 const AddProduct = () => {
-	const { user, token } = JSON.parse(isAuthenticated());
 	const [values, setValues] = useState({
 		name: "",
 		description: "",
@@ -17,10 +16,12 @@ const AddProduct = () => {
 		photo: "",
 		loading: "",
 		error: "",
-		createProduct: "",
+		createdProduct: "",
 		redirectToProfile: false,
 		formData: "",
 	});
+
+	const { user, token } = JSON.parse(isAuthenticated());
 
 	const {
 		name,
@@ -32,19 +33,46 @@ const AddProduct = () => {
 		quantity,
 		loading,
 		error,
-		createProduct,
+		createdProduct,
 		redirectToProfilelse,
 		formData,
-    } = values;
-    
-    const handleChange = name => event => {
-        
-    }
+	} = values;
 
+	useEffect(() => {
+		setValues({ ...values, formData: new FormData() });
+	}, []);
 
+	const handleChange = (name) => (event) => {
+		const value =
+			name === "photo" ? event.target.files[0] : event.target.value;
+		formData.set(name, value);
+		setValues({ ...values, [name]: value });
+	};
+
+	const onSubmit = (event) => {
+		event.preventDefault();
+		setValues({ ...values, error: "", loading: true });
+
+		createProduct(user._id, token, formData).then((data) => {
+			if (data.error) {
+				setValues({ ...values, error: data.error });
+			} else {
+				setValues({
+					...values,
+					name: "",
+					description: "",
+					photos: "",
+					price: "",
+					quatity: "",
+                    loading: false,
+                    createdProduct: data.name
+				});
+			}
+		});
+	};
 
 	const newPostForm = () => (
-		<form action="" className="mb-3">
+		<form onSubmit={onSubmit} className="mb-3">
 			<h4>Post Photo</h4>
 			<div className="form-group">
 				<label className="btn btn-secondary">
@@ -89,21 +117,20 @@ const AddProduct = () => {
 				<select
 					onChange={handleChange("category")}
 					className="form-control">
-                        <option value="5ed4e8b6520bc50fdc7157fd">Node</option>
-
-                    </select>
+					<option value="5ed29a5964982025c48c551d">Node</option>
+					<option value="5ed29ac064982025c48c551e">PHP</option>
+				</select>
 			</div>
-            <div className="form-group">
+			<div className="form-group">
 				<label className="text-muted">Shipping</label>
 				<select
 					onChange={handleChange("shipping")}
 					className="form-control">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-
-                    </select>
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</select>
 			</div>
-            <div className="form-group">
+			<div className="form-group">
 				<label className="text-muted">Quantity</label>
 				<input
 					onChange={handleChange("quantity")}
@@ -113,9 +140,7 @@ const AddProduct = () => {
 				/>
 			</div>
 
-            <button className="btn btn-outline-primary">
-                Create Product
-            </button>
+			<button className="btn btn-outline-primary">Create Product</button>
 		</form>
 	);
 
