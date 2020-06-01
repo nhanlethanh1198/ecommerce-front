@@ -23,7 +23,15 @@ const Signup = () => {
 		setValues({ ...values, error: false });
 		signup({ name, email, password }).then((data) => {
 			if (data.error) {
-				setValues({ ...values, error: data.error, success: false });
+				setValues({
+					...values,
+					error:
+						parseInt(data.error.slice(0,5)) === 11000
+							? "Email already exists"
+							: data.error,
+					success: false,
+				});
+				console.log(data.error);
 			} else {
 				setValues({
 					...values,
