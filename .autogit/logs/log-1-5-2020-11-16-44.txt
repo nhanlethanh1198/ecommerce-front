@@ -1,0 +1,18 @@
+-------------------- Auto-Git Log --------------------
+		Mon Jun 01 2020 11:16:44 GMT+0700 (Indochina Time)
+------------------------------------------------------
+
+Modified files:
+* package-lock.json
+* package.json
+* src/user/Signup.jsx
+
+
+Created files:
+* src/auth/index.js
+
+
+Deleted files:
+
+
+Renamed files:
