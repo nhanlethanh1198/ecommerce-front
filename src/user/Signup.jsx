@@ -31,7 +31,6 @@ const Signup = () => {
 							: data.error,
 					success: false,
 				});
-				console.log(data.error);
 			} else {
 				setValues({
 					...values,
