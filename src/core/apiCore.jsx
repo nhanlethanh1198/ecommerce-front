@@ -16,3 +16,25 @@ export const getCategories = () => {
 		.then((response) => response.json())
 		.catch((error) => console.error(error));
 };
+
+export const getFilterProducts = (skip, limit, filters = {}) => {
+	const data = {
+		limit,
+		skip,
+		filters,
+	};
+	return fetch(`${API}/products/by/search`, {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+	})
+		.then((response) => {
+			return response.json();
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+};

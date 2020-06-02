@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
-import { getCategories } from "./apiCore";
+import { getCategories, getFilterProducts } from "./apiCore";
 import Checkbox from "./Checkbox";
 import { prices } from "./FixPrices";
 import Radiobox from "./Radiobox";
@@ -13,7 +13,10 @@ const Shop = () => {
 		},
 	});
 	const [categories, setCategories] = useState([]);
-	const [error, setError] = useState([]);
+	const [error, setError] = useState(false);
+	const [limit, setLimit] = useState(6);
+	const [skip, setSkip] = useState(0);
+	const [filteredResults, setFilteredResults] = useState(0);
 
 	// load categories and set form data
 	const init = () => {
@@ -26,15 +29,42 @@ const Shop = () => {
 		});
 	};
 
+	const loadFilterResults = (newFilters) => {
+		getFilterProducts(skip, limit, newFilters).then((data) => {
+			if (data.error) {
+				setError(data.error);
+			} else {
+				setFilteredResults(data);
+			}
+		});
+	};
+
 	useEffect(() => {
 		init();
+		loadFilterResults(skip, limit, myFilters.filters)
 	}, []);
 
 	const handleFilters = (filters, filterBy) => {
 		// console.log(filters, filterBy);
 		const newFilters = { ...myFilters };
 		newFilters.filters[filterBy] = filters;
+		if (filterBy === "price") {
+			let priceValues = handlePrice(filters);
+			newFilters.filters[filterBy] = priceValues;
+		}
+		loadFilterResults(myFilters.filters);
 		setMyFilters(newFilters);
+	};
+
+	const handlePrice = (values) => {
+		const data = prices;
+		let array = [];
+		for (let key in data) {
+			if (data[key]._id === parseInt(values)) {
+				array = data[key].array;
+			}
+		}
+		return array;
 	};
 
 	return (
@@ -63,7 +93,7 @@ const Shop = () => {
 						/>
 					</div>
 				</div>
-				<div className="col-8">{JSON.stringify(myFilters)}</div>
+				<div className="col-8">{JSON.stringify(filteredResults)}</div>
 			</div>
 		</Layout>
 	);
