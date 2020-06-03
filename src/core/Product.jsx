@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
-import { read } from "./apiCore";
+import { read, listRelated } from "./apiCore";
 import Card from "./Card";
 
 const Product = (props) => {
 	const [product, setProduct] = useState({});
+	const [relatedProduct, setRelatedProduct] = useState([]);
 	const [error, setError] = useState(false);
 
 	const loadSingleProduct = (productId) => {
@@ -14,6 +15,14 @@ const Product = (props) => {
 				console.log(error);
 			} else {
 				setProduct(data);
+				// fetch related products
+				listRelated(data._id).then((data) => {
+					if (data.error) {
+						setError(data.error);
+					} else {
+						setRelatedProduct(data);
+					}
+				});
 			}
 		});
 	};
@@ -31,10 +40,22 @@ const Product = (props) => {
 				product.description &&
 				product.description.substring(0, 100)
 			}
-			className="container-fluid">
+			className="container">
 			<h2 className="mb-4"> Single Product</h2>
 			<div className="row">
-				{product && product.description && <Card product={product} showViewProductButton={false} />}
+				<div className="col-8">
+					{product && product.description && (
+						<Card product={product} showViewProductButton={false} />
+					)}
+				</div>
+				<div className="col-4">
+					<h4>Related Products</h4>
+					{relatedProduct.map((product, index) => (
+						<div key={index} className="mb-3">
+							<Card  product={product} showViewProductButton={true} />
+						</div>
+					) )}
+				</div>
 			</div>
 		</Layout>
 	);
