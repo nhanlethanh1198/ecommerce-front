@@ -48,3 +48,12 @@ export const list = (params) => {
 		.then((response) => response.json())
 		.catch((error) => console.log(error));
 };
+
+export const read = (productId) => {
+	return fetch(`${API}/product/${productId}`, {
+		method: "GET",
+		"Content-Type": "application/json",
+	})
+		.then((response) => response.json())
+		.catch((error) => console.error(error));
+};
