@@ -30,6 +30,9 @@ const Menu = ({ history }) => {
 						Shop
 					</Link>
 				</li>
+				{
+					isAuthenticated() && console.log(JSON.parse(isAuthenticated()).user.role)
+				}
 				{isAuthenticated() && JSON.parse(isAuthenticated()).user.role === 0 && (
 					<li className="nav-item">
 					<Link
